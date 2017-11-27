@@ -5,8 +5,12 @@
  */
 package cl.duoc.servlet;
 
+import cl.duoc.controlador.EscribirLog;
 import cl.duoc.controlador.ctrlCarretera;
+import cl.duoc.controlador.ctrlOpcion;
+import cl.duoc.controlador.ctrlVenta;
 import cl.duoc.modelo.Carretera;
+import cl.duoc.modelo.Opcion;
 import cl.duoc.modelo.Venta;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -49,6 +53,8 @@ public class srvProcesarPedido extends HttpServlet {
             String cmbAutopista = request.getParameter("cmbAutopista");
             String txtCantidad = request.getParameter("txtCantidad");
             String btnAgregar = request.getParameter("btnAgregar");
+            String btnHacerPedido = request.getParameter("btnHacerPedido");
+            String resetTodo = request.getParameter("resetTodo");
             
             String btnModificarCantidad = request.getParameter("btnModificarCantidad");
             String btnEliminar = request.getParameter("btnEliminar");
@@ -58,6 +64,7 @@ public class srvProcesarPedido extends HttpServlet {
             ArrayList<Venta> listado;
             
             if(btnAgregar != null){
+                EscribirLog log = new EscribirLog();
                 sesion.setAttribute("RUT", txtRut);
                 sesion.setAttribute("NOMBRE", txtNombre);
                 sesion.setAttribute("DIRECCION", txtDireccion);
@@ -77,16 +84,19 @@ public class srvProcesarPedido extends HttpServlet {
                         listado.get(i).setCantidad(Integer.parseInt(txtCantidad));
                         listado.get(i).setTotal(c.getValor()*Integer.parseInt(txtCantidad));
                         encontrado = true;
+                        log.RegistroLog("Cliente " + sesion.getAttribute("RUT") + " modifica cantidad de un pedido. Carretera: " + c.getNombre() +  " - Nueva cantidad: " + txtCantidad);
                         break;
                     }
                 }
                 if (!encontrado){
                     Venta v = new Venta();
                     v.setId(Integer.parseInt(cmbAutopista));
+                    v.setRut(txtRut);
                     v.setCarretera(c.getNombre());
                     v.setTotal(c.getValor()*Integer.parseInt(txtCantidad));
                     v.setCantidad(Integer.parseInt(txtCantidad));
                     listado.add(v);
+                    log.RegistroLog("Cliente " + sesion.getAttribute("RUT") + " agrega un nuevo pedido al listado. Carretera: " + c.getNombre() + " - Cantidad: " + txtCantidad);
                 }
                 int sumartotales=0;
                 for(Venta temp : listado){
@@ -100,10 +110,12 @@ public class srvProcesarPedido extends HttpServlet {
                 ctrlCarretera ctrlC = new ctrlCarretera();
                 int cantidad = Integer.parseInt(request.getParameter("txtCantidad"+btnModificarCantidad));
                 ArrayList<Venta> v = (ArrayList<Venta>)sesion.getAttribute(("LISTADOCOMPRA"));
+                String carretera = "";
                 for (int i=0;i<v.size();i++){
                     if (v.get(i).getId()==Integer.parseInt(btnModificarCantidad)){
                         v.get(i).setCantidad(cantidad);
                         v.get(i).setTotal(ctrlC.ObtenerValor(Integer.parseInt(btnModificarCantidad))*cantidad);
+                        carretera = v.get(i).getCarretera();
                         break;
                     }
                 }
@@ -113,12 +125,18 @@ public class srvProcesarPedido extends HttpServlet {
                 }
                 sesion.setAttribute("TOTALAPAGAR", sumartotales);
                 sesion.setAttribute("LISTADOCOMPRA", v);
+                EscribirLog log = new EscribirLog();
+                log.RegistroLog("Cliente " + sesion.getAttribute("RUT") + " modifica cantidad de un pedido. Carretera: " + carretera +  " - Nueva cantidad: " + cantidad);
                 dispatcher = request.getServletContext().getRequestDispatcher("/index.jsp");
                 dispatcher.forward(request, response);
             }else if (btnEliminar != null){
                 ArrayList<Venta> v = (ArrayList<Venta>)sesion.getAttribute(("LISTADOCOMPRA"));
+                String carretera = "";
+                int cant = 0;
                 for (int i=0;i<v.size();i++){
                     if (v.get(i).getId()==Integer.parseInt(btnEliminar)){
+                        carretera = v.get(i).getCarretera();
+                        cant = v.get(i).getCantidad();
                         v.remove(i);
                         break;
                     }
@@ -129,8 +147,40 @@ public class srvProcesarPedido extends HttpServlet {
                 }
                 sesion.setAttribute("TOTALAPAGAR", sumartotales);
                 sesion.setAttribute("LISTADOCOMPRA", v);
+                EscribirLog log = new EscribirLog();
+                log.RegistroLog("Cliente " + sesion.getAttribute("RUT") + " elimina un pedido del listado. Carretera: " + carretera + ", Cantidad: " + cant);
                 dispatcher = request.getServletContext().getRequestDispatcher("/index.jsp");
                 dispatcher.forward(request, response); 
+            }else if (btnHacerPedido != null){
+                ctrlVenta cv = new ctrlVenta();
+                int IDVenta = cv.ObtenerNuevoID();
+                if (IDVenta != -1){
+                    IDVenta = IDVenta + 1;
+                    ArrayList<Venta> v = (ArrayList<Venta>)sesion.getAttribute("LISTADOCOMPRA");
+                    if (cv.GuardarVenta(IDVenta, v)){
+                        Opcion o = new Opcion();
+                        o.setIdventa(IDVenta);
+                        o.setPago(Integer.parseInt(sesion.getAttribute("OPPAGO").toString()));
+                        o.setRetiro(Integer.parseInt(sesion.getAttribute("OPRETIRO").toString()));
+                        ctrlOpcion co = new ctrlOpcion();
+                        if (co.GuardarOpciones(o)){
+                            sesion.setAttribute("IDVENTA", IDVenta);
+                            dispatcher = request.getServletContext().getRequestDispatcher("/voucher.jsp");
+                            dispatcher.forward(request, response);
+                        }
+                    }
+                }
+            }else if (resetTodo != null){
+                sesion.removeAttribute("NOMBRE");
+                sesion.removeAttribute("RUT");
+                sesion.removeAttribute("DIRECCION");
+                sesion.removeAttribute("COMPRADOR");
+                sesion.removeAttribute("OPPAGO");
+                sesion.removeAttribute("OPRETIRO");
+                sesion.removeAttribute("LISTADOCOMPRA");
+                sesion.removeAttribute("TOTALAPAGAR");
+                dispatcher = request.getServletContext().getRequestDispatcher("/index.jsp");
+                dispatcher.forward(request, response);
             }
         }
     }

@@ -33,7 +33,7 @@
                 <div class="col-md-4">
                     <center>
                         <img alt="Highway Inc." src="img/logo.png" class="img-thumbnail" /><br>
-                    <a href="" >Inicio</a><br>
+                    Inicio<br>
                     <a href="">Ver Pedidos</a><br>
                     <a href="">Ayuda</a>
                     </center>
@@ -109,6 +109,8 @@
                         <%
                             if (sesion.getAttribute("LISTADOCOMPRA")!=null){
                                 ArrayList<Venta> v = (ArrayList<Venta>)sesion.getAttribute("LISTADOCOMPRA");
+                                if (v.size()>0)
+                                {
                                 %>
                                 <center>
                                     <form name="frmListado" id="frmListado" method="POST" action="./srvProcesarPedido">
@@ -139,11 +141,17 @@
                                     </tbody>
                                 </table>
                                             <h2>Total a Pagar: <b>$ <%=sesion.getAttribute("TOTALAPAGAR")%></b></h2>
-                                            <input type="submit" name="btnHacerPedido" value="Hacer pedido" class="btn btn-success" form="frmListado">&nbsp;<input type="submit" name="resetTodo" value="Reiniciar Formulario" class="btn btn-warning" form="frmListado">
+                                            <input type="submit" name="btnHacerPedido" value="Hacer pedido" class="btn btn-success" form="frmListado">&nbsp;
                                     </form>
                                 </center>
                                 <%
+                                }
                             }
+                            if (sesion.getAttribute("NOMBRE")!= null){
+                            %>
+                            <center><input type="submit" name="resetTodo" value="Reiniciar Formulario" class="btn btn-warning" form="frmListado"></center>
+                            <%
+}
                             %>
                     </div>
                 </div>
