@@ -31,7 +31,7 @@
                         <img alt="Highway Inc." src="img/logo.png" class="img-thumbnail" /><br>
                     <a href="index.jsp" >Inicio</a><br>
                     <a href="">Ver Pedidos</a><br>
-                    <a href="">Ayuda</a>
+                    <a href="ayuda.jsp">Ayuda</a>
                     </center>
                 </div>
                 <div class="col-md-4">

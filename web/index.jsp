@@ -49,11 +49,11 @@
                         </div>
                         <div class="form-group">
                             <label for="txtRut">Direccion:</label>
-                            <input type="text" name="txtDireccion" id="txtDireccion" required="true" class="form-control" <%if (sesion.getAttribute("DIRECCION")!=null){%> value="<%=sesion.getAttribute("DIRECCION")%>"<%}%>/>
+                            <input type="text" name="txtDireccion" id="txtDireccion" required="true" class="form-control" <%if (sesion.getAttribute("DIRECCION")!=null){%> value="<%=sesion.getAttribute("DIRECCION")%>" readonly<%}%>/>
                         </div>
                         <div class="form-group">
                             <label for="txtComprador">Comprado por:</label>
-                            <input type="text" name="txtComprador" id="txtComprador" required="true" class="form-control" <%if (sesion.getAttribute("COMPRADOR")!=null){%> value="<%=sesion.getAttribute("NOMBRE")%>"<%}%>/>
+                            <input type="text" name="txtComprador" id="txtComprador" required="true" class="form-control" <%if (sesion.getAttribute("COMPRADOR")!=null){%> value="<%=sesion.getAttribute("NOMBRE")%>" readonly<%}%>/>
                         </div>
                 </div>
                 <div class="col-md-4">
@@ -64,24 +64,24 @@
                 <div class="col-md-4">
                     <h4>Opciones de pago:</h4>
                     <div class="custom-radio">
-                        <input type="radio" name="opPago" value="1" id="Transferencia" required="true"<%if (sesion.getAttribute("OPPAGO")!=null && sesion.getAttribute("OPPAGO").equals("1")){%> checked="checked" <%}%> >
+                        <input type="radio" name="opPago" value="1" id="Transferencia" required="true"<%if (sesion.getAttribute("OPPAGO")!=null && sesion.getAttribute("OPPAGO").equals("1")){%> checked="checked" <%}else if (sesion.getAttribute("OPPAGO")!=null && !sesion.getAttribute("OPPAGO").equals("1")){ %> disabled <%}%> >
                         <label for="Transferencia">Transferencia</label>                        
                     </div>
                     <div class="custom-radio">
-                        <input type="radio" name="opPago" value="2" id="Linea"<%if (sesion.getAttribute("OPPAGO")!=null && sesion.getAttribute("OPPAGO").equals("2")){%> checked="checked" <%}%> >
+                        <input type="radio" name="opPago" value="2" id="Linea"<%if (sesion.getAttribute("OPPAGO")!=null && sesion.getAttribute("OPPAGO").equals("2")){%> checked="checked" <%}else if (sesion.getAttribute("OPPAGO")!=null && !sesion.getAttribute("OPPAGO").equals("2")){ %> disabled <%}%> >
                         <label for="Linea">Pago en Linea</label>                        
                     </div>
                     <div class="custom-radio">
-                        <input type="radio" name="opPago" value="3" id="OC"<%if (sesion.getAttribute("OPPAGO")!=null && sesion.getAttribute("OPPAGO").equals("3")){%> checked="checked" <%}%> >
+                        <input type="radio" name="opPago" value="3" id="OC"<%if (sesion.getAttribute("OPPAGO")!=null && sesion.getAttribute("OPPAGO").equals("3")){%> checked="checked" <%}else if (sesion.getAttribute("OPPAGO")!=null && !sesion.getAttribute("OPPAGO").equals("3")){ %> disabled <%}%> >
                         <label for="OC">Orden de Compra</label>                        
                     </div>
                     <h4>Opciones de retiro:</h4>
                     <div class="custom-radio">
-                        <input type="radio" name="opRetiro" value="1" id="Oficina" required="true"<%if (sesion.getAttribute("OPRETIRO")!=null && sesion.getAttribute("OPRETIRO").equals("1")){%> checked="checked" <%}%> >
+                        <input type="radio" name="opRetiro" value="1" id="Oficina" required="true"<%if (sesion.getAttribute("OPRETIRO")!=null && sesion.getAttribute("OPRETIRO").equals("1")){%> checked="checked" <%}else if (sesion.getAttribute("OPRETIRO")!=null && !sesion.getAttribute("OPRETIRO").equals("1")){ %> disabled <%}%> >
                         <label for="Oficina">Oficina</label>                        
                     </div>
                     <div class="custom-radio">
-                        <input type="radio" name="opRetiro" value="2" id="EnvioCliente"<%if (sesion.getAttribute("OPRETIRO")!=null && sesion.getAttribute("OPRETIRO").equals("2")){%> checked="checked" <%}%> >
+                        <input type="radio" name="opRetiro" value="2" id="EnvioCliente"<%if (sesion.getAttribute("OPRETIRO")!=null && sesion.getAttribute("OPRETIRO").equals("2")){%> checked="checked" <%}else if (sesion.getAttribute("OPRETIRO")!=null && !sesion.getAttribute("OPRETIRO").equals("2")){ %> disabled <%}%> >
                         <label for="EnvioCliente">Envio Cliente</label>                        
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                         <%
                             for (Carretera temp : c){
                                 %>
-                                <option value="<%=temp.getId()%>"><%=temp.getNombre()%></option>
+                                <option value="<%=temp.getId()%>"><%=temp.getNombre()%> ($<%=temp.getValor()%> c/u)</option>
                                 <%
                             }
                         %>
