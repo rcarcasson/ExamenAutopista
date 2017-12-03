@@ -5,7 +5,9 @@
  */
 package cl.duoc.servlet;
 
+import cl.duoc.controlador.ctrlOpcion;
 import cl.duoc.controlador.ctrlVenta;
+import cl.duoc.modelo.Opcion;
 import cl.duoc.modelo.Venta;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -64,51 +66,68 @@ public class srvBuscarPedido extends HttpServlet {
                 }
             }
             if (btn_repetir != null) {
-                ArrayList<Venta> listaVenta = controlVenta.BuscarVentas(Integer.valueOf(btn_repetir));
-                sesion.setAttribute("LISTADOCOMPRA", listaVenta);
-                dispatcher = getServletContext().getRequestDispatcher("/index.jsp");
-                dispatcher.forward(request, response);
+                int IDVenta = controlVenta.ObtenerNuevoID();
+                if (IDVenta != -1) {
+                    IDVenta = IDVenta + 1;
+                    ArrayList<Venta> v = controlVenta.BuscarVentas(Integer.valueOf(btn_repetir));
+                    if (controlVenta.GuardarVenta(IDVenta, v)) {
+                        Opcion o = controlVenta.BuscarOpcion(Integer.valueOf(btn_repetir));
+                        ctrlOpcion co = new ctrlOpcion();
+                        if (co.GuardarOpciones(o)) {
+                            sesion.setAttribute("IDVENTA", IDVenta);
+                            sesion.setAttribute("LISTADOCOMPRA", v);
+                            sesion.setAttribute("OPRETIRO", o);
+                            dispatcher = request.getServletContext().getRequestDispatcher("/voucher.jsp");
+                            dispatcher.forward(request, response);
+                        }
+                    }
+                }
             }
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+        /**
+         * Handles the HTTP <code>GET</code> method.
+         *
+         * @param request servlet request
+         * @param response servlet response
+         * @throws ServletException if a servlet-specific error occurs
+         * @throws IOException if an I/O error occurs
+         */
+        @Override
+        protected void doGet
+        (HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
+            processRequest(request, response);
+        }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        /**
+         * Handles the HTTP <code>POST</code> method.
+         *
+         * @param request servlet request
+         * @param response servlet response
+         * @throws ServletException if a servlet-specific error occurs
+         * @throws IOException if an I/O error occurs
+         */
+        @Override
+        protected void doPost
+        (HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
+            processRequest(request, response);
+        }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
+        /**
+         * Returns a short description of the servlet.
+         *
+         * @return a String containing servlet description
+         */
+        @Override
+        public String getServletInfo
+        
+        
+            () {
         return "Short description";
-    }// </editor-fold>
+        }// </editor-fold>
 
-}
+    }

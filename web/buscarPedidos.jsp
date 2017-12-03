@@ -59,7 +59,7 @@
           </form>
 
             <div class="table-responsive">
-                <form name="frm_ventas" action="./srvProcesarPedido" method="POST">
+                <form name="frm_ventas" action="./srvBuscarPedido" method="POST">
                     <table class="table table-hover">
                         <tr>
                             <th>Pedido</th>

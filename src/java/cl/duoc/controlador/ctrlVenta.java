@@ -6,6 +6,7 @@
 package cl.duoc.controlador;
 
 import cl.duoc.db.Conexion;
+import cl.duoc.modelo.Opcion;
 import cl.duoc.modelo.Venta;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -164,6 +165,29 @@ public class ctrlVenta {
             ex.printStackTrace();
             return new ArrayList<>();
         }
-    }    
-    
+    }
+
+    public Opcion BuscarOpcion(int idventa) {
+        try {
+            Opcion op = new Opcion();
+            Conexion conn = new Conexion();
+            Connection conexion = conn.getConnection("bdcarreteras");
+
+            Statement stmt = conexion.createStatement();
+
+            String consulta = "SELECT idventa, pago, retiro fron opciones where idventa = " + idventa + ";";
+
+            ResultSet rst = stmt.executeQuery(consulta);
+            while (rst.next()) {
+                op.setIdventa(rst.getInt("idventa"));
+                op.setPago(rst.getInt("pago"));
+                op.setRetiro(rst.getInt("retiro"));
+            }
+            return op;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new Opcion();
+        }
+    }
+
 }
