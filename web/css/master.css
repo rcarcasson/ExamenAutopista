@@ -4,18 +4,21 @@ html, body{
 }
 
 body{
-    background-image: url(../img/fondo.jpg) ; 
-    
-    background-size: cover; 
-    background-position: center;
-    
+    margin: 0px;
+    padding: 0px;
+    background: url(../img/fondo.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 .container{
-    
+
     box-shadow: 0px 0px 60px 0px;
     background-color: #fff;
 }
+
 body.index .container, .navbar .container, .footer .container{
     box-shadow: none;
     background-color: transparent;

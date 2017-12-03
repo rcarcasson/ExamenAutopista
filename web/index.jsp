@@ -57,7 +57,7 @@
                         </div>
                 </div>
                 <div class="col-md-4">
-                    <center><h2>Ver Carreteras</h2></center>
+                    <center><h2><a href="carreteras.jsp">Ver Carreteras</a></h2></center>
                 </div>
             </div>
             <div class="row">

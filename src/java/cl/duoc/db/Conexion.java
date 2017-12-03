@@ -17,7 +17,7 @@ import java.util.Properties;
 public class Conexion {
 
     //SQL SERVER
-    private final static String serverName = "localhost:3306";
+    private final static String serverName = "localhost:3308";
       
     //SQL SERVER AUTENTICACION
     private final static String userName = "root";

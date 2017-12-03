@@ -17,50 +17,153 @@ import java.util.ArrayList;
  * @author v-carica
  */
 public class ctrlVenta {
-    public int ObtenerNuevoID(){
-        int total=0;
-        try{
+
+    public int ObtenerNuevoID() {
+        int total = 0;
+        try {
             Conexion conn = new Conexion();
             Connection conexion = conn.getConnection("bdcarreteras");
-            
+
             Statement stmt = conexion.createStatement();
-            
+
             String consulta = "SELECT COUNT(DISTINCT idventa) from venta;";
-            
+
             ResultSet rst = stmt.executeQuery(consulta);
-            while (rst.next()){
+            while (rst.next()) {
                 total = rst.getInt(1);
             }
             return total;
-        }
-        catch (Exception err){
+        } catch (Exception err) {
             return -1;
         }
     }
-    
-    public boolean GuardarVenta(int idVenta, ArrayList<Venta> v){
+
+    public boolean GuardarVenta(int idVenta, ArrayList<Venta> v) {
         EscribirLog log = new EscribirLog();
-        try{
+        try {
             Conexion conn = new Conexion();
             Connection conexion = conn.getConnection("bdcarreteras");
-            
+
             Statement stmt = conexion.createStatement();
-            
-            for(Venta temp : v){
-                String consulta = "INSERT INTO venta VALUES (NULL, " +
-                        idVenta + ",'" +
-                        temp.getRut() + "','" +
-                        temp.getCarretera() + "'," +
-                        temp.getCantidad() +  "," + 
-                        temp.getTotal() + ");";
+
+            for (Venta temp : v) {
+                String consulta = "INSERT INTO venta VALUES (NULL, "
+                        + idVenta + ",'"
+                        + temp.getRut() + "','"
+                        + temp.getCarretera() + "',"
+                        + temp.getCantidad() + ","
+                        + temp.getTotal() + ");";
                 stmt.executeUpdate(consulta);
             }
             log.RegistroLog("Pedido número " + idVenta + " registrado correctamente");
             return true;
-        }
-        catch (Exception err){
+        } catch (Exception err) {
             log.RegistroLog("Ocurrio un error al registrar pedido número " + idVenta + " - Error: " + err.getMessage());
             return false;
         }
     }
+
+    public ArrayList<Venta> ListarUsuarios() {
+        ArrayList<Venta> listaUsuarios = new ArrayList<>();
+        try {
+            Conexion conn = new Conexion();
+            Connection conexion = conn.getConnection("bdcarreteras");
+
+            Statement stmt = conexion.createStatement();
+
+            String consulta = "SELECT DISTINCT(rut) as rut from venta;";
+
+            ResultSet rst = stmt.executeQuery(consulta);
+            while (rst.next()) {
+                Venta ven = new Venta();
+                ven.setRut(rst.getString("rut"));
+                listaUsuarios.add(ven);
+            }
+
+            return listaUsuarios;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public ArrayList<Venta> BuscarDetallePorUsuario(String rut) {
+        ArrayList<Venta> listaVentas = new ArrayList<>();
+        try {
+            Conexion conn = new Conexion();
+            Connection conexion = conn.getConnection("bdcarreteras");
+
+            Statement stmt = conexion.createStatement();
+
+            String consulta = "SELECT idventa, rut, carretera, cantidad, total from venta where rut = '" + rut + "';";
+
+            ResultSet rst = stmt.executeQuery(consulta);
+            while (rst.next()) {
+                Venta ven = new Venta();
+                ven.setId(rst.getInt("idventa"));
+                ven.setRut(rst.getString("rut"));
+                ven.setCarretera(rst.getString("carretera"));
+                ven.setCantidad(rst.getInt("cantidad"));
+                ven.setTotal(rst.getInt("total"));
+                listaVentas.add(ven);
+            }
+            return listaVentas;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public ArrayList<Venta> BuscarPedidoPorUsuario(String rut) {
+        ArrayList<Venta> listaVentas = new ArrayList<>();
+        try {
+            Conexion conn = new Conexion();
+            Connection conexion = conn.getConnection("bdcarreteras");
+
+            Statement stmt = conexion.createStatement();
+
+            String consulta = "SELECT idventa, rut, sum(total) as total from venta where rut = '" + rut + "' group by idventa, rut;";
+
+            ResultSet rst = stmt.executeQuery(consulta);
+            while (rst.next()) {
+                Venta ven = new Venta();
+                ven.setId(rst.getInt("idventa"));
+                ven.setRut(rst.getString("rut"));
+                ven.setTotal(rst.getInt("total"));
+                listaVentas.add(ven);
+            }
+            return listaVentas;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public ArrayList<Venta> BuscarVentas(int idventa) {
+        ArrayList<Venta> listaVentas = new ArrayList<>();
+        try {
+            Conexion conn = new Conexion();
+            Connection conexion = conn.getConnection("bdcarreteras");
+
+            Statement stmt = conexion.createStatement();
+
+            String consulta = "SELECT idventa, rut, carretera, cantidad, total from venta where idventa = '" + idventa + "';";
+
+            ResultSet rst = stmt.executeQuery(consulta);
+            while (rst.next()) {
+                Venta ven = new Venta();
+                ven.setId(rst.getInt("idventa"));
+                ven.setRut(rst.getString("rut"));
+                ven.setCarretera(rst.getString("carretera"));
+                ven.setCantidad(rst.getInt("cantidad"));
+                ven.setTotal(rst.getInt("total"));
+                listaVentas.add(ven);
+            }
+            return listaVentas;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ArrayList<>();
+        }
+    }    
+    
 }
