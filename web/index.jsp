@@ -82,7 +82,7 @@
                             Comprado por:
                         </td>
                         <td>
-                            <input type="text" name="txtComprador" id="txtComprador" required="" class="form-control" <%if (sesion.getAttribute("COMPRADOR") != null) {%> value="<%=sesion.getAttribute("NOMBRE")%>" readonly<%}%>/>
+                            <input type="text" name="txtComprador" id="txtComprador" required="" class="form-control" <%if (sesion.getAttribute("COMPRADOR") != null) {%> value="<%=sesion.getAttribute("COMPRADOR")%>" readonly<%}%>/>
                         </td>
                     </tr>
                 </table>
