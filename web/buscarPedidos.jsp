@@ -26,12 +26,12 @@
             .informacion{
                 padding: 15px;
             }
- 
+
             input[type="text"]
-{
-    background: transparent;
-    border: none;
-}
+            {
+                background: transparent;
+                border: none;
+            }
         </style>
     </head>
     <body>
@@ -42,7 +42,7 @@
         <%@include file="_menu.jspf" %>
         <section>
             <h2>Buscar Pedidos</h2>
-          
+
             <form class="form-inline" name="frm_listar" action="./srvBuscarPedido" method="POST">
 
                 <div class="form-group col-md-3 informacion">
@@ -56,7 +56,7 @@
                     </select>
                 </div>
                 <button id="btn_buscar" name="btn_buscar" class="btn btn-primary col-md-2">Buscar</button>
-          </form>
+            </form>
 
             <div class="table-responsive">
                 <form name="frm_ventas" action="./srvBuscarPedido" method="POST">
@@ -67,14 +67,15 @@
                             <th>Pedir</th>
                         </tr>
                         <% if (sesion.getAttribute("lista_ventas") != null) {
-                                    for (Venta x : (ArrayList<Venta>) sesion.getAttribute("lista_ventas")) {%>
+                                for (Venta x : (ArrayList<Venta>) sesion.getAttribute("lista_ventas")) {%>
                         <tr>
                             <td><%=x.getCarretera()%></td>
                             <td><input type="text" name="txt_total" value="<%=x.getTotal()%>" readonly=""></td>
-                            <td><button class="btn btn-primary btn-sm" name="btn_repetir" id="btn_repetir" value="<%= x.getId() %>">+</button></td>              
+                            <td><button class="btn btn-primary btn-sm" name="btn_repetir" id="btn_repetir" value="<%= x.getId()%>">+</button></td>              
                         </tr>
                         <%}
-                                }%>
+                                sesion.removeAttribute("lista_ventas");
+                            }%>
                     </table>
                 </form>
             </div>

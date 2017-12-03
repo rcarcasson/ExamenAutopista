@@ -1,14 +1,8 @@
-<%-- 
-    Document   : voucher
-    Created on : Nov 27, 2017, 9:48:28 AM
-    Author     : v-carica
---%>
-
 <%@page import="cl.duoc.modelo.Venta"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <% HttpSession sesion = request.getSession();%>
-<% ArrayList<Venta> lv = (ArrayList<Venta>)sesion.getAttribute("LISTADOCOMPRA"); %>
+<% ArrayList<Venta> lv = (ArrayList<Venta>) sesion.getAttribute("LISTADOCOMPRA");%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,28 +10,43 @@
         <title>Highway - Venta de Peajes</title>
         <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
         <link rel="stylesheet" href="css/master.css" type="text/css" >
+        <style>
+            h2{
+                text-align: center;
+            }
+
+            section{
+                margin-left: 250px;
+                margin-top: 0px;
+                background-color: rgba(255,255,255,0.8);
+                width: calc(100% - 250px);
+                padding: 20px 40px;
+                min-height: 100%;
+            }
+
+            table{
+                align: center;
+            }
+
+            .centered{
+                margin: auto;
+                padding: 20px;
+                background-color: white;
+            }
+
+        </style>
     </head>
     <body>
-        <form name="frmprincipal" method="post" action="./srvProcesarPedido">
-            <div class="container-fluid" style="background-color: rgba(255,255,255, 0.9);">
-            <div class="row">
-                <div class="col-md-12">
-                    <h3 class="text-center">VOUCHER</h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <center>
-                        <img alt="Highway Inc." src="img/logo.png" class="img-thumbnail" /><br>
-                    <a href="index.jsp" >Inicio</a><br>
-                    <a href="">Ver Pedidos</a><br>
-                    <a href="ayuda.jsp">Ayuda</a>
-                    </center>
-                </div>
-                <div class="col-md-4">
-                    <h2>Pedido Número: <%=sesion.getAttribute("IDVENTA").toString() %></h2>
+        <%@include file="_menu.jspf" %>
+        <section>
+            <h3 class="text-center">VOUCHER</h3>
+            <form name="frmprincipal" method="post" action="./srvProcesarPedido">
+                <fieldset>
                     <div class="row">
-                                  <table class="table">
+                        <div class="col-md-8 centered">
+                            <h4>Pedido Número: <%=sesion.getAttribute("IDVENTA").toString()%></h4>
+                            <div class="row">
+                                <table class="table">
                                     <thead>
                                         <tr>
                                             <th>Carretera</th>
@@ -47,63 +56,55 @@
                                     <tbody>
                                         <%
                                             int suma = 0;
-                                            for (Venta temp : lv){
+                                            for (Venta temp : lv) {
                                                 suma = suma + temp.getTotal();
-                                            %>
+                                        %>
                                         <tr class="active">
                                             <td><%=temp.getCarretera()%></td>
                                             <td><%=temp.getCantidad()%></td>
                                         </tr>
                                         <%
                                             }
-                                            %>
+                                        %>
                                     </tbody>
-                                </table>
-                            <center><h1><b>TOTAL A PAGAR: $ <%=suma%></b></h1></center>                  
+                                    <tr><td></td></tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <h5><b>TOTAL A PAGAR: $ <%=suma%></b></h5>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <%
+                                                String retiro = "";
+                                                if (sesion.getAttribute("OPRETIRO").equals("1")) {
+                                                    retiro = "RETIRO EN OFICINA";
+                                                } else {
+                                                    retiro = "ENVIO A CLIENTE";
+                                                }
+                                                sesion.removeAttribute("NOMBRE");
+                                                sesion.removeAttribute("RUT");
+                                                sesion.removeAttribute("DIRECCION");
+                                                sesion.removeAttribute("COMPRADOR");
+                                                sesion.removeAttribute("OPPAGO");
+                                                sesion.removeAttribute("OPRETIRO");
+                                                sesion.removeAttribute("LISTADOCOMPRA");
+                                                sesion.removeAttribute("TOTALAPAGAR");
+                                                sesion.removeAttribute("IDVENTA");
+                                                sesion.removeAttribute("LISTADOCOMPRA");
+                                            %>
+                                            <h5><b>OPCION DE ENVIO: <%=retiro%></b></h5>
+                                        </td>
+                                    </tr>
+                                </table>                 
+                            </div>
+                            <div class="row centered">
+                                <h6>Muchas gracias por preferirnos</h6>
+                            </div>
+                        </div>
                     </div>
-                    <div class="row">
-                        <%
-                            String retiro = "";
-                            if (sesion.getAttribute("OPRETIRO").equals("1")){
-                                retiro = "RETIRO EN OFICINA";
-                            }else{
-                                retiro = "ENVIO A CLIENTE";
-                            }
-                            sesion.removeAttribute("NOMBRE");
-                            sesion.removeAttribute("RUT");
-                            sesion.removeAttribute("DIRECCION");
-                            sesion.removeAttribute("COMPRADOR");
-                            sesion.removeAttribute("OPPAGO");
-                            sesion.removeAttribute("OPRETIRO");
-                            sesion.removeAttribute("LISTADOCOMPRA");
-                            sesion.removeAttribute("TOTALAPAGAR");
-                            sesion.removeAttribute("IDVENTA");
-                            sesion.removeAttribute("LISTADOCOMPRA");
-                            %>
-                            <center><h4><b>OPCION DE ENVIO: <%=retiro%></b></h4></center>
-                    </div>
-                    <div class="row">
-                        <center><h6>Muchas gracias por preferirnos</h6></center>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <center><h2>Ver Carreteras</h2></center>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                </div>
-                <div class="col-md-4">
-
-                </div>
-                <div class="col-md-4"></div>
-            </div>
-                <div class="row">
-                    <div class="col-md-12">
-                    </div>
-                </div>
-        </div>
-        <script src="js/bootstrap.js"></script>
-        <script src="js/master.js"></script>        
+                </fieldset>
+            </form>
+        </section>
     </body>
 </html>
