@@ -27,6 +27,7 @@ public class ctrlVenta {
      * @return un int con el total de registros que coincidan con la consulta.
      */
     public int ObtenerNuevoID() {
+        EscribirLog log = new EscribirLog();
         int total = 0;
         try {
             Conexion conn = new Conexion();
@@ -42,6 +43,7 @@ public class ctrlVenta {
             }
             return total;
         } catch (Exception err) {
+            log.RegistroLog("Ocurrió un error obtener un nuevo ID - Error: " + err.getMessage());
             return -1;
         }
     }
@@ -81,7 +83,7 @@ public class ctrlVenta {
             log.RegistroLog("Pedido número " + idVenta + " registrado correctamente");
             return true;
         } catch (Exception err) {
-            log.RegistroLog("Ocurrio un error al registrar pedido número " + idVenta + " - Error: " + err.getMessage());
+            log.RegistroLog("Ocurrió un error al registrar pedido número " + idVenta + " - Error: " + err.getMessage());
             return false;
         }
     }
@@ -95,6 +97,7 @@ public class ctrlVenta {
      * usuarios.
      */
     public ArrayList<Venta> ListarUsuarios() {
+        EscribirLog log = new EscribirLog();
         ArrayList<Venta> listaUsuarios = new ArrayList<>();
         try {
             Conexion conn = new Conexion();
@@ -112,8 +115,8 @@ public class ctrlVenta {
             }
 
             return listaUsuarios;
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception err) {
+            log.RegistroLog("Ocurrió un error consultar la lista de usuarios - Error: " + err.getMessage());
             return new ArrayList<>();
         }
     }
@@ -128,6 +131,7 @@ public class ctrlVenta {
      */
     public ArrayList<Venta> BuscarDetallePorUsuario(String rut) {
         ArrayList<Venta> listaVentas = new ArrayList<>();
+        EscribirLog log = new EscribirLog();
         try {
             Conexion conn = new Conexion();
             Connection conexion = conn.getConnection("bdcarreteras");
@@ -147,8 +151,8 @@ public class ctrlVenta {
                 listaVentas.add(ven);
             }
             return listaVentas;
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception err) {
+            log.RegistroLog("Ocurrió un error consultar las ventas por usuario - Error: " + err.getMessage());
             return new ArrayList<>();
         }
     }
@@ -162,6 +166,7 @@ public class ctrlVenta {
      * el valor total a pagar por cada venta.
      */
     public ArrayList<Venta> BuscarPedidoPorUsuario(String rut) {
+        EscribirLog log = new EscribirLog();
         ArrayList<Venta> listaVentas = new ArrayList<>();
         try {
             Conexion conn = new Conexion();
@@ -180,8 +185,8 @@ public class ctrlVenta {
                 listaVentas.add(ven);
             }
             return listaVentas;
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception err) {
+            log.RegistroLog("Ocurrió un error consultar el total de las ventas por usuario - Error: " + err.getMessage());
             return new ArrayList<>();
         }
     }
@@ -195,6 +200,7 @@ public class ctrlVenta {
      * carretera, cantidad y total filtrado por idventa.
      */
     public ArrayList<Venta> BuscarVentas(int idventa) {
+        EscribirLog log = new EscribirLog();
         ArrayList<Venta> listaVentas = new ArrayList<>();
         try {
             Conexion conn = new Conexion();
@@ -215,8 +221,8 @@ public class ctrlVenta {
                 listaVentas.add(ven);
             }
             return listaVentas;
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception err) {
+            log.RegistroLog("Ocurrió un error consultar el detalle de ventas por id - Error: " + err.getMessage());
             return new ArrayList<>();
         }
     }
@@ -231,6 +237,7 @@ public class ctrlVenta {
      * retiro filtrado por idventa.
      */
     public Opcion BuscarOpcion(int idventa) {
+        EscribirLog log = new EscribirLog();
         try {
             Opcion op = new Opcion();
             Conexion conn = new Conexion();
@@ -247,8 +254,8 @@ public class ctrlVenta {
                 op.setRetiro(rst.getInt("retiro"));
             }
             return op;
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception err) {
+            log.RegistroLog("Ocurrio un error consultar las opciones de pago y retiro - Error: " + err.getMessage());
             return new Opcion();
         }
     }
