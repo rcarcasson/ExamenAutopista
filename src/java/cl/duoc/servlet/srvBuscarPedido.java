@@ -22,7 +22,10 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author ygtha
+ * Este servlet se encarga de procesar cada una de las solicitudes que se hagan
+ * desde la página de búsqueda de pedidos, permitiendo filtrar la información de
+ * compras por rut y generando una compra nueva con datos anteriores.
+ *
  */
 @WebServlet(name = "srvBuscarPedido", urlPatterns = {"/srvBuscarPedido"})
 public class srvBuscarPedido extends HttpServlet {
@@ -49,6 +52,12 @@ public class srvBuscarPedido extends HttpServlet {
             if (btn_buscar != null) {
                 String rut = request.getParameter("cmb_rut");
                 ArrayList<Venta> ventaGuardada = controlVenta.BuscarPedidoPorUsuario(rut);
+                /**
+                 * Al presionar el botón buscar, el sistema valida si el usuario
+                 * registra pedidos anteriores para mostrar. Esto permite
+                 * determinar los usuarios que registran ventas y listarlos en
+                 * una tabla.
+                 */
                 if (!ventaGuardada.isEmpty()) {
                     ArrayList<Venta> ventaDetalle = controlVenta.BuscarDetallePorUsuario(rut);
                     for (Venta x : ventaGuardada) {
@@ -60,16 +69,37 @@ public class srvBuscarPedido extends HttpServlet {
                         }
                         x.setCarretera(pedido.substring(0, pedido.length() - 2));
                     }
+                    /**
+                     * Si el usuario registra ventas, esto se almacena en la
+                     * sesión "lista_ventas" que se despliega en la vista
+                     * buscarPedidos.jsp
+                     *
+                     */
                     sesion.setAttribute("lista_ventas", ventaGuardada);
                     dispatcher = getServletContext().getRequestDispatcher("/buscarPedidos.jsp");
                     dispatcher.forward(request, response);
-                }else{
+                } else {
+                    /**
+                     * Si el usuario no registra ventas, esto se almacena en la
+                     * sesión "no_rut" muestra el mensaje "El rut ingresado no
+                     * registra pedidos" en la vista buscarPedidos.jsp
+                     *
+                     */
                     sesion.setAttribute("no_rut", "El rut ingresado no registra pedidos.");
                     dispatcher = getServletContext().getRequestDispatcher("/buscarPedidos.jsp");
                     dispatcher.forward(request, response);
                 }
             }
             if (btn_repetir != null) {
+                /**
+                 * Si el cliente desea repetir una compra anterior, al presionar
+                 * el boton + obtiene un nuevo ID de venta, busca los detalles
+                 * de la venta anterior y genera una nueva venta con los mismos
+                 * atributos.
+                 * Si este proceso se realiza correctamente, se redirige a la
+                 * vista de voucher, para mostrar dicho detalle en pantalla.
+                 *
+                 */
                 int IDVenta = controlVenta.ObtenerNuevoID();
                 if (IDVenta != -1) {
                     IDVenta = IDVenta + 1;
@@ -89,50 +119,44 @@ public class srvBuscarPedido extends HttpServlet {
             }
         }
     }
-    
 
-        // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-        /**
-         * Handles the HTTP <code>GET</code> method.
-         *
-         * @param request servlet request
-         * @param response servlet response
-         * @throws ServletException if a servlet-specific error occurs
-         * @throws IOException if an I/O error occurs
-         */
-        @Override
-        protected void doGet
-        (HttpServletRequest request, HttpServletResponse response)
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            processRequest(request, response);
-        }
-
-        /**
-         * Handles the HTTP <code>POST</code> method.
-         *
-         * @param request servlet request
-         * @param response servlet response
-         * @throws ServletException if a servlet-specific error occurs
-         * @throws IOException if an I/O error occurs
-         */
-        @Override
-        protected void doPost
-        (HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-            processRequest(request, response);
-        }
-
-        /**
-         * Returns a short description of the servlet.
-         *
-         * @return a String containing servlet description
-         */
-        @Override
-        public String getServletInfo
-        
-        
-            () {
-        return "Short description";
-        }// </editor-fold>
-
+        processRequest(request, response);
     }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}
