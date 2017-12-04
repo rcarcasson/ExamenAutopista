@@ -29,9 +29,10 @@
 
             input[type="text"]
             {
-                background: transparent;
-                border: none;
+                margin: 20px 0;
             }
+            
+            
         </style>
     </head>
     <body>
@@ -45,20 +46,24 @@
 
             <form class="form-inline" name="frm_listar" action="./srvBuscarPedido" method="POST">
 
-                <div class="form-group col-md-3 informacion">
-                    <select id="cmb_perfil" name="cmb_rut" class="form-control" required>
-                        <option value=""> --- RUT CLIENTE --- </option>
-                        <% for (Venta x : venta) {%>
-                        <option value="<%=x.getRut()%>">
-                            <%=x.getRut()%>
-                        </option>
-                        <%}%>
-                    </select>
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="cmb_rut"><b>RUT</b> </label>  
+                    <div class="col-md-6">
+                        <input id="cmb_rut" name="cmb_rut" type="text" placeholder="12345678-9" class="form-control input-md" required="">
+
+                    </div>
+
                 </div>
-                <button id="btn_buscar" name="btn_buscar" class="btn btn-primary col-md-2">Buscar</button>
+                    <div class="col-md-4">
+                        <button id="btn_buscar" type="submit" name="btn_buscar" class="btn btn-primary">Buscar</button>
+                    </div>
             </form>
 
             <div class="table-responsive">
+                <% if (sesion.getAttribute("no_rut") != null){ %>
+                <%= sesion.getAttribute("no_rut").toString() %>
+                <% sesion.removeAttribute("no_rut");} %>
+                <% if (sesion.getAttribute("lista_ventas") != null) { %>
                 <form name="frm_ventas" action="./srvBuscarPedido" method="POST">
                     <table class="table table-hover">
                         <tr>
@@ -66,8 +71,7 @@
                             <th>Total</th>
                             <th>Pedir</th>
                         </tr>
-                        <% if (sesion.getAttribute("lista_ventas") != null) {
-                                for (Venta x : (ArrayList<Venta>) sesion.getAttribute("lista_ventas")) {%>
+                        <% for (Venta x : (ArrayList<Venta>) sesion.getAttribute("lista_ventas")) {%>
                         <tr>
                             <td><%=x.getCarretera()%></td>
                             <td><input type="text" name="txt_total" value="<%=x.getTotal()%>" readonly=""></td>

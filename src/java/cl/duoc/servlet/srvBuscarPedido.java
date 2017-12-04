@@ -49,7 +49,7 @@ public class srvBuscarPedido extends HttpServlet {
             if (btn_buscar != null) {
                 String rut = request.getParameter("cmb_rut");
                 ArrayList<Venta> ventaGuardada = controlVenta.BuscarPedidoPorUsuario(rut);
-                if (ventaGuardada != null) {
+                if (!ventaGuardada.isEmpty()) {
                     ArrayList<Venta> ventaDetalle = controlVenta.BuscarDetallePorUsuario(rut);
                     for (Venta x : ventaGuardada) {
                         String pedido = "";
@@ -61,6 +61,10 @@ public class srvBuscarPedido extends HttpServlet {
                         x.setCarretera(pedido.substring(0, pedido.length() - 2));
                     }
                     sesion.setAttribute("lista_ventas", ventaGuardada);
+                    dispatcher = getServletContext().getRequestDispatcher("/buscarPedidos.jsp");
+                    dispatcher.forward(request, response);
+                }else{
+                    sesion.setAttribute("no_rut", "El rut ingresado no registra pedidos.");
                     dispatcher = getServletContext().getRequestDispatcher("/buscarPedidos.jsp");
                     dispatcher.forward(request, response);
                 }
@@ -85,6 +89,7 @@ public class srvBuscarPedido extends HttpServlet {
             }
         }
     }
+    
 
         // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
         /**
