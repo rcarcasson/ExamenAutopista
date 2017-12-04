@@ -18,13 +18,14 @@ import java.util.ArrayList;
  * @author Alejandra Diaz - Ricardo Carcassón
  */
 public class ctrlVenta {
+
     /**
-     * Método que permite obtener un nuevo id de venta. El id es generado en base 
-     * a la cantidad de registros que existen en la tabla de ventas, considerando 
-     * solo aquellos IDs que no se repiten.
+     * Método que permite obtener un nuevo id de venta. El id es generado en
+     * base a la cantidad de registros que existen en la tabla de ventas,
+     * considerando solo aquellos IDs que no se repiten.
+     *
      * @return un int con el total de registros que coincidan con la consulta.
      */
-
     public int ObtenerNuevoID() {
         int total = 0;
         try {
@@ -44,16 +45,18 @@ public class ctrlVenta {
             return -1;
         }
     }
+
     /**
-     * Método que registra la venta cuando el cliente procesa el pedido. El 
+     * Método que registra la venta cuando el cliente procesa el pedido. El
      * método recibe dos parámetros: idVenta, que posee el número de id de venta
-     * asignado y v que posee la información de las carreteras
-     * seleccionadas en el proceso de pedido junto con las cantidads y  totales
-     * correspondientes. Adicionalmente el método guardará en el log del sistema 
-     * la acción realizada o el error que ocurrio si este fuese el caso.
+     * asignado y v que posee la información de las carreteras seleccionadas en
+     * el proceso de pedido junto con las cantidads y totales correspondientes.
+     * Adicionalmente el método guardará en el log del sistema la acción
+     * realizada o el error que ocurrio si este fuese el caso.
+     *
      * @param idVenta De tipo int con el número de la venta
-     * @param v De tipo ArrayList Venta que posee la información de las 
-     * carreteras seleccionadas en el proceso de compra con sus respectivos 
+     * @param v De tipo ArrayList Venta que posee la información de las
+     * carreteras seleccionadas en el proceso de compra con sus respectivos
      * valores
      * @return Un boolean para indicar que el proceso se registro de manera
      * correcta.
@@ -83,6 +86,14 @@ public class ctrlVenta {
         }
     }
 
+    /**
+     * Este método obtiene la lista de usuarios únicos que han realizado compras
+     * en el sistema. Permite conocer el rut de los usuarios que han realizado
+     * compras anteriores.
+     *
+     * @return un ArrayList del tipo Venta con la información del rut de los
+     * usuarios.
+     */
     public ArrayList<Venta> ListarUsuarios() {
         ArrayList<Venta> listaUsuarios = new ArrayList<>();
         try {
@@ -107,6 +118,14 @@ public class ctrlVenta {
         }
     }
 
+    /**
+     * Este método obtiene la lista de ventas por usuario, filtrado por rut.
+     * Permite obtener información histórica de las ventas por usuario.
+     *
+     * @param rut De tipo string, recibe el rut del usuario a consultar.
+     * @return un ArrayList del tipo Venta con la información del idventa, rut,
+     * carretera, cantidad, total del rut consultado.
+     */
     public ArrayList<Venta> BuscarDetallePorUsuario(String rut) {
         ArrayList<Venta> listaVentas = new ArrayList<>();
         try {
@@ -134,6 +153,14 @@ public class ctrlVenta {
         }
     }
 
+    /**
+     * Este método obtiene la lista de ventas por usuario, filtrado por rut.
+     * Informa el valor total a pagar de cada venta anterior.
+     *
+     * @param rut De tipo string, recibe el rut del usuario a consultar.
+     * @return un ArrayList del tipo Venta con la información del idventa, rut y
+     * el valor total a pagar por cada venta.
+     */
     public ArrayList<Venta> BuscarPedidoPorUsuario(String rut) {
         ArrayList<Venta> listaVentas = new ArrayList<>();
         try {
@@ -159,6 +186,14 @@ public class ctrlVenta {
         }
     }
 
+    /**
+     * Este método obtiene la lista de ventas, filtradas por id. Permite conocer
+     * los detalles de la venta anterior del usuario.
+     *
+     * @param idventa De tipo int, recibe el id de venta a consultar.
+     * @return un ArrayList del tipo Venta con la información del idventa, rut,
+     * carretera, cantidad y total filtrado por idventa.
+     */
     public ArrayList<Venta> BuscarVentas(int idventa) {
         ArrayList<Venta> listaVentas = new ArrayList<>();
         try {
@@ -186,6 +221,15 @@ public class ctrlVenta {
         }
     }
 
+    /**
+     * Este método informa la opcion de pago y retiro seleccionada por el
+     * usuario, filtrado id de venta. Este método permite conocer la opción
+     * seleccionada por el usuario en compras anteriores.
+     *
+     * @param idventa De tipo int, recibe el id de venta a consultar.
+     * @return un objeto de tipo opcion, con la informacion del idventa, pago y
+     * retiro filtrado por idventa.
+     */
     public Opcion BuscarOpcion(int idventa) {
         try {
             Opcion op = new Opcion();
