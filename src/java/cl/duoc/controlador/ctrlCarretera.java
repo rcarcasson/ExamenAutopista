@@ -15,10 +15,14 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author v-carica
+ * @author Ricardo Carcassón
  */
 public class ctrlCarretera {
-    
+    /**
+     * Este método obtiene las carreteras que se encuentran cargadas en el 
+     * sistema junto con sus valores.
+     * @return un ArrayList del tipo Carretera con la información.
+     */
     public ArrayList<Carretera> ObtenerCarreteras(){
         ArrayList<Carretera> lista = new ArrayList<Carretera>();
         try{
@@ -46,7 +50,13 @@ public class ctrlCarretera {
             return new ArrayList<Carretera>(); 
         }
     }
-    
+    /**
+     * Este método retorna una carretera en específico dependiendo del id
+     * indicado y retornara un objeto Carretera con la información del nombre
+     * y del valor de la carretera cuyo id coincida con el indicado.
+     * @param id de tipo entero, representa el id unico de la carretera a buscar
+     * @return un objeto de tipo Carretera con la información
+     */
     public Carretera ObtenerCarretera(int id){
         try{
             Conexion conn = new Conexion();
@@ -67,7 +77,12 @@ public class ctrlCarretera {
             return new Carretera();
         }
     }
-    
+    /**
+     * Este método permite obtener el valor de una carretera en base al id
+     * ingresado.
+     * @param id de tipo entero, representa el id unico de la carretera
+     * @return un valor de tipo int que representa el valor de la carretera a buscar
+     */
     public int ObtenerValor(int id){
         int valor=0;
         try{

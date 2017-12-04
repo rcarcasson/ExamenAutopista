@@ -15,9 +15,15 @@ import java.util.ArrayList;
 
 /**
  *
- * @author v-carica
+ * @author Alejandra Diaz - Ricardo Carcassón
  */
 public class ctrlVenta {
+    /**
+     * Método que permite obtener un nuevo id de venta. El id es generado en base 
+     * a la cantidad de registros que existen en la tabla de ventas, considerando 
+     * solo aquellos IDs que no se repiten.
+     * @return un int con el total de registros que coincidan con la consulta.
+     */
 
     public int ObtenerNuevoID() {
         int total = 0;
@@ -38,7 +44,20 @@ public class ctrlVenta {
             return -1;
         }
     }
-
+    /**
+     * Método que registra la venta cuando el cliente procesa el pedido. El 
+     * método recibe dos parámetros: idVenta, que posee el número de id de venta
+     * asignado y v que posee la información de las carreteras
+     * seleccionadas en el proceso de pedido junto con las cantidads y  totales
+     * correspondientes. Adicionalmente el método guardará en el log del sistema 
+     * la acción realizada o el error que ocurrio si este fuese el caso.
+     * @param idVenta De tipo int con el número de la venta
+     * @param v De tipo ArrayList Venta que posee la información de las 
+     * carreteras seleccionadas en el proceso de compra con sus respectivos 
+     * valores
+     * @return Un boolean para indicar que el proceso se registro de manera
+     * correcta.
+     */
     public boolean GuardarVenta(int idVenta, ArrayList<Venta> v) {
         EscribirLog log = new EscribirLog();
         try {

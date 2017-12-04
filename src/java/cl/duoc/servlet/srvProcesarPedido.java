@@ -25,14 +25,18 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author v-carica
+ * @author Ricardo Carcassón
  */
 @WebServlet(name = "srvProcesarPedido", urlPatterns = {"/srvProcesarPedido"})
 public class srvProcesarPedido extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Este servlet se encarga de procesar cada una de las solicitudes que se 
+     * hagan desde la página de compras del sitio, ya sea agregar una carretera 
+     * al pedido, modificar una cantidad de peajes de una carretera ingresada, 
+     * eliminar una carretera en específico, procesar el pedido completo o 
+     * reiniciar el formulario para una nueva compra en caso de errores a la 
+     * hora de ingresar los datos del cliente en el formulario.
      *
      * @param request servlet request
      * @param response servlet response
@@ -62,7 +66,13 @@ public class srvProcesarPedido extends HttpServlet {
             HttpSession sesion = request.getSession();
             RequestDispatcher dispatcher;
             ArrayList<Venta> listado;
-            
+            /**
+             * Si el usuario agregar una nueva carretera al listado el sistema
+             * guardara la información de los campos del formulario en variables 
+             * de sesión para mantener la persistencia de los datos.
+             * Tambien se inicializa un objeto log para el registro del log de
+             * sucesos.
+             */
             if(btnAgregar != null){
                 EscribirLog log = new EscribirLog();
                 sesion.setAttribute("RUT", txtRut);
@@ -71,6 +81,11 @@ public class srvProcesarPedido extends HttpServlet {
                 sesion.setAttribute("COMPRADOR", txtComprador);
                 sesion.setAttribute("OPPAGO", opPago);
                 sesion.setAttribute("OPRETIRO", opRetiro);
+                /**La sesion LISTADOCOMPRA guarda todas las carreteras que haya agregado el 
+                 * cliente en el formulario de compra. Si la sesión no existe 
+                 * se creará un nuevo listado, y en caso contrario, se asignará 
+                 * desde la variable de sesion los valores al atributo listado.
+                 */
                 if (sesion.getAttribute("LISTADOCOMPRA")==null){
                     listado = new ArrayList<Venta>();
                 }else{
@@ -79,6 +94,14 @@ public class srvProcesarPedido extends HttpServlet {
                 ctrlCarretera ctrlC = new ctrlCarretera();
                 Carretera c = ctrlC.ObtenerCarretera(Integer.parseInt(cmbAutopista));
                 boolean encontrado = false;
+                /**
+                 * Como el sistema permite agregar una carretera por pedido, el 
+                 * sistema verificará si la carretera agregada no se encuentra ya 
+                 * en el listado previo. Si la carretera ya existe en el listado 
+                 * modificará la cantidad previa con la nueva cantidad y actualizará 
+                 * los valores correspondientes y registrará en el log dicha
+                 * operación.
+                 */
                 for(int i=0;i<listado.size();i++){
                     if (listado.get(i).getCarretera().equals(c.getNombre())){
                         listado.get(i).setCantidad(Integer.parseInt(txtCantidad));
@@ -88,6 +111,11 @@ public class srvProcesarPedido extends HttpServlet {
                         break;
                     }
                 }
+                /**
+                 * En caso de que no se encuentré la carretera seleccionada dentro 
+                 * del listado de la sesión lo agregará como una nueva carretera al listado 
+                 * y registrará en el log dicha operación.
+                 */
                 if (!encontrado){
                     Venta v = new Venta();
                     v.setId(Integer.parseInt(cmbAutopista));
@@ -98,6 +126,10 @@ public class srvProcesarPedido extends HttpServlet {
                     listado.add(v);
                     log.RegistroLog("Cliente " + sesion.getAttribute("RUT") + " agrega un nuevo pedido al listado. Carretera: " + c.getNombre() + " - Cantidad: " + txtCantidad);
                 }
+                /**
+                 * Actualización del total a pagar en base a los valores y cantidades 
+                 * del listado.
+                 */
                 int sumartotales=0;
                 for(Venta temp : listado){
                     sumartotales=sumartotales+temp.getTotal();
@@ -107,6 +139,12 @@ public class srvProcesarPedido extends HttpServlet {
                 dispatcher = request.getServletContext().getRequestDispatcher("/index.jsp");
                 dispatcher.forward(request, response);
             }else if (btnModificarCantidad != null){
+                /**
+                 * Si el usuario ha decidido modificar la cantidad de una de las carreteras 
+                 * ya ingresadas en su listado el sistema recorrerá en búsqueda del id 
+                 * de la carretera a modificar, y al encontrarla actualizará las cantidades 
+                 * actualizará los totales y guardará en el log dicha acción.
+                 */
                 ctrlCarretera ctrlC = new ctrlCarretera();
                 int cantidad = Integer.parseInt(request.getParameter("txtCantidad"+btnModificarCantidad));
                 ArrayList<Venta> v = (ArrayList<Venta>)sesion.getAttribute(("LISTADOCOMPRA"));
@@ -130,6 +168,12 @@ public class srvProcesarPedido extends HttpServlet {
                 dispatcher = request.getServletContext().getRequestDispatcher("/index.jsp");
                 dispatcher.forward(request, response);
             }else if (btnEliminar != null){
+                /**
+                 * Si el usuario decide eliminar un pedido del listado el sistema recorrera 
+                 * el listado en busca del ID en cuestión. Si lo encuentra eliminará el 
+                 * registro del listado y actualizará los totales para finalizar con el 
+                 * registro del log de la acción correspondiente.
+                 */
                 ArrayList<Venta> v = (ArrayList<Venta>)sesion.getAttribute(("LISTADOCOMPRA"));
                 String carretera = "";
                 int cant = 0;
@@ -152,6 +196,15 @@ public class srvProcesarPedido extends HttpServlet {
                 dispatcher = request.getServletContext().getRequestDispatcher("/index.jsp");
                 dispatcher.forward(request, response); 
             }else if (btnHacerPedido != null){
+                /**
+                 * Cuando el usuario decide procesar el pedido el sistema iniciará el proceso 
+                 * de guardar la información en la base de datos, obteniendo el id de la venta, 
+                 * procesando cada carretera del listado, guardando las opciones seleccionadas de 
+                 * medio de pago y retiro y redireccionando al voucher para desplegar la información
+                 * resultante. La página voucher.jsp es la encargada de eliminar las variables de 
+                 * sesión relacionadas a todo el proceso de compra para iniciar un nuevo proceso en 
+                 * limpio.
+                 */
                 ctrlVenta cv = new ctrlVenta();
                 int IDVenta = cv.ObtenerNuevoID();
                 if (IDVenta != -1){
@@ -171,6 +224,11 @@ public class srvProcesarPedido extends HttpServlet {
                     }
                 }
             }else if (resetTodo != null){
+                /**
+                 * Si el usuario decide iniciar el proceso de compra desde el principio 
+                 * se eliminarán las variables de sesión relacionadas y se redireccionará
+                 * al formulario en limpio para iniciar un nuevo proceso de compra.
+                 */
                 sesion.removeAttribute("NOMBRE");
                 sesion.removeAttribute("RUT");
                 sesion.removeAttribute("DIRECCION");

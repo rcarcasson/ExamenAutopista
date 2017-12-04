@@ -6,8 +6,11 @@
 package cl.duoc.modelo;
 
 /**
- *
- * @author v-carica
+ * Esta clase gestionará la información de la carretera. Usará tres propiedades: 
+ * id de tipo int para el identificador unico de la carretera, nombre de tipo
+ * string para el nombre de la carretera y valor de tipo int para el precio del
+ * peaje asociado de dicha carretera.
+ * @author Ricardo Carcassón
  */
 public class Carretera {
     private int id;

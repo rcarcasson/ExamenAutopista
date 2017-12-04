@@ -6,8 +6,14 @@
 package cl.duoc.modelo;
 
 /**
- *
- * @author v-carica
+ * Clase que gestionará la información de la venta realizada en el sistema.
+ * Posee 5 propiedades: id de tipo int que será el identificador único dentro 
+ * la base de datos. Rut de tipo string para el rut de la empresa, carretera de 
+ * tipo string que guardara el nombre de la carretera, cantidad de tipo int que
+ * indica la cantidad de peajes ingresados a comprar para dicha carretera por 
+ * parte del cliente y total de tipo int para registrar el total de la compra en 
+ * base al valor * con la cantidad de peajes solicitados por el cliente.
+ * @author Ricardo Carcassón
  */
 public class Venta {
     private int id;

@@ -6,8 +6,14 @@
 package cl.duoc.modelo;
 
 /**
- *
- * @author v-carica
+ * Esta clase se encargará de la gestión de la información de las opciones 
+ * seleccionadas por el usuario con cuatro propiedades. ID de tipo int para 
+ * el identificador unico de la opción dentro de la base de datos, idventa de 
+ * tipo int que indica el número de venta al que esta asociada la opción, 
+ * pago de tipo int para indicar el tipo de pago que selecciono el usuario y
+ * retiro de tipo int para indicar la opción de retiro seleccionada por el 
+ * usuario en el proceso de compra.
+ * @author Ricardo Carcassón
  */
 public class Opcion {
     private int id;

@@ -12,9 +12,16 @@ import java.sql.Statement;
 
 /**
  *
- * @author v-carica
+ * @author Ricardo Carcassón
  */
 public class ctrlOpcion {
+    /**
+     * Este método permite guardar las opciones de forma de pago y de retiro de
+     * los peajes comprados por el cliente. El método guardar el id de la venta
+     * junto con las opciones previamente indicadas.
+     * @param o De tipo clase Opcion con los valores seleccionados por el cliente
+     * @return boolean para indicar si se guardo de manera correcta la información
+     */
     public boolean GuardarOpciones(Opcion o){
         EscribirLog log = new EscribirLog();
         try{

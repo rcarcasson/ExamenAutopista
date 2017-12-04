@@ -12,10 +12,22 @@ import java.text.SimpleDateFormat;
 
 /**
  *
- * @author v-carica
+ * @author Ricardo Carcassón
+ * Este controlador se encarga de escribir en un archivo log cada unas de las
+ * acciones que ocurren dentro del sistema, así como también los errores que
+ * ocurren en ellas.
  */
 
 public class EscribirLog {
+    /**
+     * Método que escribe en un archivo de texto un log con las acciones 
+     * realizadas por los usuarios y los errores que ocurren dentro del sistema.
+     * El log se guarda dentro del HOME del usuario que corre la aplicación.
+     * El método registra la fecha y la hora del evento e imprime el texto en el
+     * archivo archivolog.txt
+     * @param texto El parametro texto es el que trae la descripción de la acción o
+     * error que ocurrio en el sistema.
+     */
     public void RegistroLog(String texto){
         FileWriter archivo = null;
         PrintWriter pw = null;

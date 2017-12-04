@@ -11,8 +11,10 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 /**
- *
- * @author v-carica
+ * 
+ * @author Ricardo Carcassón
+ * Este método permite establecer la conexión a la base de datos previa configuración 
+ * de los parámetros de usuario y password.
  */
 public class Conexion {
 
