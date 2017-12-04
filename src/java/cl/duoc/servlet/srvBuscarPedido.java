@@ -33,7 +33,10 @@ public class srvBuscarPedido extends HttpServlet {
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
-     *
+     * Este servlet realiza la tarea de buscar por rut las compras realizadas 
+     * por una empresa para presentarlas en un listado. Desde acá se procesa la 
+     * opción de realizar una nueva compra en base a los pedidos mostrados bajo 
+     * un nuevo número de venta.
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
