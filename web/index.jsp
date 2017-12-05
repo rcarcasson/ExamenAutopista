@@ -132,7 +132,7 @@
                         <td rowspan="2" valign="top">
 
                             Cantidad:<br>
-                            <input type="number" name="txtCantidad" id="txtCantidad" class="form-control" pattern="[0-9]+" required="" />
+                            <input type="number" name="txtCantidad" id="txtCantidad" class="form-control" pattern="[0-9]+" required="" min="1" />
                             <input type="submit" class="btn btn-success" value="Agregar" name="btnAgregar"/>
 
                         </td>
@@ -181,7 +181,7 @@
                                 <fieldset>
                                     <tr class="active">
                                         <td><%=temp.getCarretera()%></td>
-                                        <td><input type="text" name="txtCantidad<%=temp.getId()%>" value="<%=temp.getCantidad()%>" required="true" pattern="[0-9]*"></td>
+                                        <td><input type="number" name="txtCantidad<%=temp.getId()%>" value="<%=temp.getCantidad()%>" required="true" pattern="[0-9]*" min="1"></td>
                                         <td>$ <%=temp.getTotal()%></td>
                                         <td><button type="submit" class="btn btn-success" name="btnModificarCantidad" value="<%=temp.getId()%>" >Modificar</button>&nbsp;<button type="submit" class="btn btn-danger" name="btnEliminar" value="<%=temp.getId()%>" >Eliminar</button></td>
                                     </tr>
