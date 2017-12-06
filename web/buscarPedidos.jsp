@@ -49,7 +49,7 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label" for="cmb_rut"><b>RUT</b> </label>  
                     <div class="col-md-6">
-                        <input id="cmb_rut" name="cmb_rut" type="text" placeholder="12345678-9" class="form-control input-md" required="">
+                        <input id="cmb_rut" name="cmb_rut" type="text" maxlength="10" pattern="[0-9]{1,8}-[0-9Kk]{1}" placeholder="12345678-9" class="form-control input-md" required="">
 
                     </div>
 
