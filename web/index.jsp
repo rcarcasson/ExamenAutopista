@@ -60,7 +60,7 @@
                             Rut:
                         </td>
                         <td>
-                            <input type="text" name="txtRut" id="txtRut" required="" class="form-control" <%if (sesion.getAttribute("RUT") != null) {%> value="<%=sesion.getAttribute("RUT")%>" readonly<%}%>/> 
+                            <input type="text" name="txtRut" id="txtRut" required="" maxlength="10" pattern="[0-9]{1,8}-[0-9Kk]{1}" placeholder="12345678-9" title="Ej. 12345678-9" class="form-control" <%if (sesion.getAttribute("RUT") != null) {%> value="<%=sesion.getAttribute("RUT")%>" readonly<%}%>/> 
                         </td>
                         <td></td>
                         <td>
